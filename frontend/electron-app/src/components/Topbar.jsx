@@ -1,6 +1,6 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Box, IconButton, Avatar } from "@mui/material";
-import DarkModeToggle from "./DarkModeToggle";
+import React from 'react';
+import { AppBar, Toolbar, Typography, Box, IconButton, Avatar } from '@mui/material';
+import DarkModeToggle from './DarkModeToggle';
 
 export default function Topbar({ mode, setMode }) {
   return (
