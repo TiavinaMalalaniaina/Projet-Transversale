@@ -1,0 +1,22 @@
+
+# Dépendances
+node_modules/
+package-lock.json
+
+# Build
+build/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Electron
+public/electron.js
+
+# Autres
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
