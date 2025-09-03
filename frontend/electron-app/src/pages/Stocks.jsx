@@ -1,5 +1,21 @@
-import React, { useState } from "react";
-import { Typography, Box, Button, Card, CardContent, Stack, TextField, InputAdornment, CardHeader, TablePagination, Chip, IconButton, Toolbar } from "@mui/material";
+import React, { useState } from 'react';
+import {
+  Typography,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Stack,
+  TextField,
+  InputAdornment,
+  TablePagination,
+  Chip,
+  IconButton,
+  Toolbar,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import {
   Table,
   TableBody,
@@ -9,18 +25,62 @@ import {
   TableRow,
   TableSortLabel,
   Checkbox,
-  Paper,
-} from "@mui/material";
+} from '@mui/material';
 
-import StatCard from "../components/StatCard";
-import { Add, AttachMoney, Build, Delete, Edit, EditSquare, FilterListAlt, People, Search, Timer } from "@mui/icons-material";
+import StatCard from '../components/StatCard';
+import {
+  Add,
+  AttachMoney,
+  Build,
+  Delete,
+  EditSquare,
+  FilterListAlt,
+  People,
+  Search,
+  Timer,
+} from '@mui/icons-material';
 
 const rows = [
-  { id: 1, name: "Produit A", category: "Électronique", price: 100, stock: 100, statut: "En Stock" },
-  { id: 2, name: "Produit A", category: "Électronique", price: 100, stock: 100, statut: "En Stock" },
-  { id: 3, name: "Produit A", category: "Électronique", price: 100, stock: 100, statut: "En Stock" },
-  { id: 4, name: "Produit A", category: "Électronique", price: 100, stock: 100, statut: "En Stock" },
-  { id: 5, name: "Produit A", category: "Électronique", price: 100, stock: 100, statut: "En Stock" },
+  {
+    id: 1,
+    name: 'Produit A',
+    category: 'Électronique',
+    price: 100,
+    stock: 100,
+    statut: 'En Stock',
+  },
+  {
+    id: 2,
+    name: 'Produit A',
+    category: 'Électronique',
+    price: 100,
+    stock: 100,
+    statut: 'En Stock',
+  },
+  {
+    id: 3,
+    name: 'Produit A',
+    category: 'Électronique',
+    price: 100,
+    stock: 100,
+    statut: 'En Stock',
+  },
+  {
+    id: 4,
+    name: 'Produit A',
+    category: 'Électronique',
+    price: 100,
+    stock: 100,
+    statut: 'En Stock',
+  },
+  {
+    id: 5,
+    name: 'Produit A',
+    category: 'Électronique',
+    price: 100,
+    stock: 100,
+    statut: 'En Stock',
+  },
 ];
 // Fonction de tri
 function descendingComparator(a, b, orderBy) {
@@ -30,7 +90,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -42,39 +102,35 @@ function stableSort(array, comparator) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  return stabilized.map((el) => el[0]);
+  return stabilized.map(el => el[0]);
 }
 
 export default function Stocks() {
-
-  const [search, setSearch] = useState("");
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("name");
+  const [search, setSearch] = useState('');
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('name');
   const [selected, setSelected] = useState([]);
-
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState("");
 
   // Pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+  const handleRequestSort = property => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rows.map(n => n.id);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (id) => {
+  const handleClick = id => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -94,48 +150,55 @@ export default function Stocks() {
     setSelected(newSelected);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = id => selected.indexOf(id) !== -1;
 
   // Gestion de la pagination
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   const handleFilterChange = () => {
-    console.log("Recherche :", search);
-    console.log("Catégorie :", category);
+    console.log('Recherche :', search);
     // Ici tu peux appeler une API ou filtrer une liste
   };
 
   return (
     <Box>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginBottom: '1rem'
-      }}>
-        <Box>
-          <Typography variant="h2" color="primary">Gestion des stocks</Typography>
-          <Typography variant="subtitle1" color="text.secondary">Gérer vos produits et surveillez les niveaux de stock</Typography>
-        </Box>
-        <Box sx={{
+      <Box
+        sx={{
           display: 'flex',
-          alignItems: 'center'
-        }}>
+          justifyContent: 'space-between',
+          marginBottom: '1rem',
+        }}
+      >
+        <Box>
+          <Typography variant="h2" color="primary">
+            Gestion des stocks
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Gérer vos produits et surveillez les niveaux de stock
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
           <Button variant="contained" startIcon={<Add />}>
             Ajouter un produit
           </Button>
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", flexWrap: "wrap", mb: 3 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: 3 }}>
         {/* Card 1 */}
-        <Box sx={{ flex: "1 1 25%", p: 1, minWidth: 250 }}>
+        <Box sx={{ flex: '1 1 25%', p: 1, minWidth: 250 }}>
           <StatCard
             title="Total Produits"
             value="1235"
@@ -145,7 +208,7 @@ export default function Stocks() {
         </Box>
 
         {/* Card 2 */}
-        <Box sx={{ flex: "1 1 25%", p: 1, minWidth: 250 }}>
+        <Box sx={{ flex: '1 1 25%', p: 1, minWidth: 250 }}>
           <StatCard
             title="En Stock"
             value="320"
@@ -155,7 +218,7 @@ export default function Stocks() {
         </Box>
 
         {/* Card 3 */}
-        <Box sx={{ flex: "1 1 25%", p: 1, minWidth: 250 }}>
+        <Box sx={{ flex: '1 1 25%', p: 1, minWidth: 250 }}>
           <StatCard
             title="Stock Faible"
             value="23"
@@ -165,7 +228,7 @@ export default function Stocks() {
         </Box>
 
         {/* Card 4 */}
-        <Box sx={{ flex: "1 1 25%", p: 1, minWidth: 250 }}>
+        <Box sx={{ flex: '1 1 25%', p: 1, minWidth: 250 }}>
           <StatCard
             title="Rupture"
             value="12"
@@ -175,7 +238,7 @@ export default function Stocks() {
         </Box>
       </Box>
 
-      <Box sx={{ marginBottom: "1rem" }}>
+      <Box sx={{ marginBottom: '1rem' }}>
         <Card sx={{ p: 1 }}>
           <CardContent sx={{ p: 1, pb: 1 }}>
             <Stack
@@ -200,7 +263,7 @@ export default function Stocks() {
                     ),
                   },
                 }}
-                onChange={(e) => {
+                onChange={e => {
                   setSearch(e.target.value);
                   handleFilterChange();
                 }}
@@ -209,23 +272,20 @@ export default function Stocks() {
               <Button variant="contained" startIcon={<FilterListAlt />}>
                 Filtre avancée
               </Button>
-
             </Stack>
           </CardContent>
         </Card>
       </Box>
 
       <Box>
-        <Card sx={{
-          p: 0,
-        }}>
+        <Card
+          sx={{
+            p: 0,
+          }}
+        >
           <CardContent sx={{ p: 0 }}>
             <Toolbar>
-              <Typography
-              color="inherit"
-              variant="h6"
-              component="div"
-              >
+              <Typography color="inherit" variant="h6" component="div">
                 Produits
               </Typography>
             </Toolbar>
@@ -236,66 +296,62 @@ export default function Stocks() {
                     <TableCell align="left" padding="checkbox">
                       <Checkbox
                         checked={selected.length === rows.length}
-                        indeterminate={
-                          selected.length > 0 && selected.length < rows.length
-                        }
+                        indeterminate={selected.length > 0 && selected.length < rows.length}
                         onChange={handleSelectAllClick}
                       />
                     </TableCell>
                     <TableCell align="left">
                       <TableSortLabel
-                        active={orderBy === "name"}
-                        direction={orderBy === "name" ? order : "asc"}
-                        onClick={() => handleRequestSort("name")}
+                        active={orderBy === 'name'}
+                        direction={orderBy === 'name' ? order : 'asc'}
+                        onClick={() => handleRequestSort('name')}
                       >
-                        Nom
+                        NOM
                       </TableSortLabel>
                     </TableCell>
                     <TableCell align="left">
                       <TableSortLabel
-                        active={orderBy === "category"}
-                        direction={orderBy === "category" ? order : "asc"}
-                        onClick={() => handleRequestSort("category")}
+                        active={orderBy === 'category'}
+                        direction={orderBy === 'category' ? order : 'asc'}
+                        onClick={() => handleRequestSort('category')}
                       >
-                        Catégorie
+                        CATEGORIE
                       </TableSortLabel>
                     </TableCell>
                     <TableCell align="left">
                       <TableSortLabel
-                        active={orderBy === "stock"}
-                        direction={orderBy === "stock" ? order : "asc"}
-                        onClick={() => handleRequestSort("stock")}
+                        active={orderBy === 'stock'}
+                        direction={orderBy === 'stock' ? order : 'asc'}
+                        onClick={() => handleRequestSort('stock')}
                       >
-                        Stock
+                        STOCK
                       </TableSortLabel>
                     </TableCell>
                     <TableCell align="left">
                       <TableSortLabel
-                        active={orderBy === "statut"}
-                        direction={orderBy === "statut" ? order : "asc"}
-                        onClick={() => handleRequestSort("statut")}
+                        active={orderBy === 'statut'}
+                        direction={orderBy === 'statut' ? order : 'asc'}
+                        onClick={() => handleRequestSort('statut')}
                       >
-                        Statut
+                        STATUT
                       </TableSortLabel>
                     </TableCell>
                     <TableCell align="left">
                       <TableSortLabel
-                        active={orderBy === "price"}
-                        direction={orderBy === "price" ? order : "asc"}
-                        onClick={() => handleRequestSort("price")}
+                        active={orderBy === 'price'}
+                        direction={orderBy === 'price' ? order : 'asc'}
+                        onClick={() => handleRequestSort('price')}
                       >
-                        Prix
+                        PRIX
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell align="left">
-                      Actions
-                    </TableCell>
+                    <TableCell align="left">ACTIONS</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {stableSort(rows, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
+                    .map(row => {
                       const isItemSelected = isSelected(row.id);
                       return (
                         <TableRow
@@ -309,7 +365,30 @@ export default function Stocks() {
                           <TableCell align="left" padding="checkbox">
                             <Checkbox checked={isItemSelected} />
                           </TableCell>
-                          <TableCell align="left">{row.name}</TableCell>
+                          <TableCell align="left">
+                            <ListItem>
+                              <ListItemIcon>
+                                <img
+                                  src="https://d3d71ba2asa5oz.cloudfront.net/12003181/images/iph8goldnew3.jpg"
+                                  alt="Produit A"
+                                  style={{
+                                    width: 46,
+                                    height: 46,
+                                    borderRadius: 8,
+                                    objectFit: 'cover',
+                                  }}
+                                />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={row.name}
+                                secondary={
+                                  <Typography variant="subtitle2" color="text.secondary">
+                                    Référence: PRO-OUI
+                                  </Typography>
+                                }
+                              />
+                            </ListItem>
+                          </TableCell>
                           <TableCell align="left">{row.category}</TableCell>
                           <TableCell align="left">{row.stock}</TableCell>
                           <TableCell align="left">
@@ -319,9 +398,9 @@ export default function Stocks() {
                           <TableCell align="left">
                             <IconButton
                               color="primary"
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation(); // Empêche la sélection de la ligne
-                                console.log("Modifier", row.id);
+                                console.log('Modifier', row.id);
                                 // Ici tu peux ouvrir un modal ou naviguer vers la page d'édition
                               }}
                             >
@@ -329,9 +408,9 @@ export default function Stocks() {
                             </IconButton>
                             <IconButton
                               color="error"
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
-                                console.log("Supprimer", row.id);
+                                console.log('Supprimer', row.id);
                                 // Ici tu peux appeler une fonction pour supprimer le produit
                               }}
                             >
