@@ -1,11 +1,11 @@
-import React from "react";
-import { IconButton } from "@mui/material";
-import { Brightness4, Brightness7 } from "@mui/icons-material";
+import React from 'react';
+import { IconButton } from '@mui/material';
+import { Brightness4, Brightness7 } from '@mui/icons-material';
 
 export default function DarkModeToggle({ mode, setMode }) {
   return (
-    <IconButton onClick={() => setMode(mode === "light" ? "dark" : "light")} color="inherit">
-      {mode === "light" ? <Brightness4 /> : <Brightness7 />}
+    <IconButton onClick={() => setMode(mode === 'light' ? 'dark' : 'light')} color="inherit">
+      {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
     </IconButton>
   );
 }
