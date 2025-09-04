@@ -78,7 +78,6 @@ CREATE TABLE product_image (
     product_image_id SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL,
     image_data BYTEA,
-    is_primary BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
 );
 
@@ -89,14 +88,23 @@ CREATE TABLE product_image (
 CREATE TABLE customer (
     customer_id SERIAL PRIMARY KEY,
     company_id INTEGER NOT NULL,
-    customer_code VARCHAR(20),
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100),
     phone_number VARCHAR(20),
     address VARCHAR(200),
     FOREIGN KEY (company_id) REFERENCES company(company_id) ON DELETE CASCADE,
-    CONSTRAINT unique_email_per_company UNIQUE (company_id, email),
-    CONSTRAINT unique_customer_code_per_company UNIQUE (company_id, customer_code)
+    CONSTRAINT unique_email_per_company UNIQUE (company_id, email)
+);
+
+-- =============================================================================
+-- TABLE DES METHODES DE PAIEMENT
+-- =============================================================================
+
+CREATE TABLE payment_method (
+    payment_method_id SERIAL PRIMARY KEY,
+    company_id INTEGER NOT NULL,
+    payment_method_name VARCHAR(20),
+    FOREIGN KEY (company_id) REFERENCES company(company_id) ON DELETE CASCADE
 );
 
 -- =============================================================================
@@ -117,9 +125,11 @@ CREATE TABLE "order" (
     delivery_amount DECIMAL(12,2) NOT NULL DEFAULT 0,
     discount_amount DECIMAL(12,2) DEFAULT 0,
     tax_amount DECIMAL(12,2) DEFAULT 0,
+    method_payment_id INTEGER,
     notes TEXT,
     FOREIGN KEY (company_id) REFERENCES company(company_id) ON DELETE CASCADE,
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id),
     CONSTRAINT unique_order_number_per_company UNIQUE (company_id, order_number)
 );
 
@@ -151,14 +161,13 @@ CREATE TABLE discount (
     discount_name VARCHAR(100) NOT NULL,
     discount_value DECIMAL(10,2) NOT NULL,
     product_id INTEGER,
-    customer_id INTEGER,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (company_id) REFERENCES company(company_id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES product(product_id),
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+    FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
+
+
 
 -- =============================================================================
 -- TABLE DES MOUVEMENTS DE STOCK
