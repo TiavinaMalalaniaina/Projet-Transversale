@@ -1,0 +1,3 @@
+-- Script de création de base de données e-commerce PostgreSQL
+-- Création des tables avec gestion multi-entreprises et utilisateurs
+-- Version complète avec toutes les fonctionnalités
