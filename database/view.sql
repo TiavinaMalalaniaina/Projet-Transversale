@@ -4,7 +4,7 @@
 -- =============================================================================
 
 -- Vue pour le stock actuel par produit
-CREATE VIEW current_stock AS
+CREATE VIEW v_current_stock AS
 SELECT 
     p.company_id,
     p.product_id,
@@ -19,7 +19,7 @@ SELECT
             WHEN sm.movement_type = 'ADJUSTMENT' THEN sm.quantity
             WHEN sm.movement_type = 'RETURN' THEN sm.quantity
         END
-    ), 0) as current_stock,
+    ), 0) AS current_stock,
     p.min_stock,
     p.selling_price,
     CASE 
@@ -30,16 +30,30 @@ SELECT
                 WHEN sm.movement_type = 'ADJUSTMENT' THEN sm.quantity
                 WHEN sm.movement_type = 'RETURN' THEN sm.quantity
             END
-        ), 0) <= p.min_stock THEN TRUE
-        ELSE FALSE
-    END as low_stock_alert,
-    p.is_active
+        ), 0) <= 0 THEN 'RUPTURE'
+        WHEN COALESCE(SUM(
+            CASE 
+                WHEN sm.movement_type = 'IN' THEN sm.quantity
+                WHEN sm.movement_type IN ('OUT', 'TRANSFER') THEN -sm.quantity
+                WHEN sm.movement_type = 'ADJUSTMENT' THEN sm.quantity
+                WHEN sm.movement_type = 'RETURN' THEN sm.quantity
+            END
+        ), 0) <= p.min_stock THEN 'SOUS_SEUIL'
+        ELSE 'NORMAL'
+    END AS status
 FROM product p
 LEFT JOIN stock_movement sm ON p.product_id = sm.product_id
 LEFT JOIN category c ON p.category_id = c.category_id
 LEFT JOIN unit u ON p.unit_id = u.unit_id
-WHERE p.is_active = TRUE
-GROUP BY p.company_id, p.product_id, p.product_name, p.sku, c.category_name, u.unit_name, p.min_stock, p.selling_price, p.is_active;
+GROUP BY 
+    p.company_id, 
+    p.product_id, 
+    p.product_name, 
+    p.sku, 
+    c.category_name, 
+    u.unit_name, 
+    p.min_stock, 
+    p.selling_price;
 
 -- Vue pour les statistiques des commandes
 CREATE VIEW order_statistics AS

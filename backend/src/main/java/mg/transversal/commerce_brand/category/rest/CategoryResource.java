@@ -33,6 +33,12 @@ public class CategoryResource {
         return ResponseEntity.ok(categoryService.findAll());
     }
 
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<CategoryDTO>> getCategoriesByCompanyId(
+            @PathVariable(name = "companyId") final Integer companyId) {
+        return ResponseEntity.ok(categoryService.findCategoriesByCompanyId(companyId));
+    }
+
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDTO> getCategory(
             @PathVariable(name = "categoryId") final Integer categoryId) {
