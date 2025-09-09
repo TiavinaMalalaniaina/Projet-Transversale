@@ -1,0 +1,7 @@
+.my-header {
+  --background: #3880ff; /* fond du header */
+  --color: #fff; /* texte */
+  --border-style: solid; /* si tu veux une bordure */
+  --border-width: 2px;
+  --border-color: #000;
+}
