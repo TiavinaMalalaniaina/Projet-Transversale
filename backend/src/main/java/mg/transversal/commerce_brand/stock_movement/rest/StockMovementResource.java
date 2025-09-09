@@ -17,15 +17,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
-@RequestMapping(value = "/api/stockMovements", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/stocks", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StockMovementResource {
 
     private final StockMovementService stockMovementService;
 
     public StockMovementResource(final StockMovementService stockMovementService) {
         this.stockMovementService = stockMovementService;
+    }
+
+    @PostMapping("/increase")
+    @ApiResponse(responseCode = "201")
+    public ResponseEntity<Integer> increaseStock(
+            @RequestBody @Valid final StockMovementDTO stockMovementDTO) {
+        final Integer createdStockMovementId = stockMovementService.increaseStock(stockMovementDTO);
+        return new ResponseEntity<>(createdStockMovementId, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/decrease")
+    @ApiResponse(responseCode = "201")
+    public ResponseEntity<Integer> decreaseStock(
+            @RequestBody @Valid final StockMovementDTO stockMovementDTO) {
+        final Integer createdStockMovementId = stockMovementService.decreaseStock(stockMovementDTO);
+        return new ResponseEntity<>(createdStockMovementId, HttpStatus.CREATED);
     }
 
     @GetMapping

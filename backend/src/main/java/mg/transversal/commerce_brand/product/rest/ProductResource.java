@@ -3,7 +3,10 @@ package mg.transversal.commerce_brand.product.rest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+
+import mg.transversal.commerce_brand.product.model.CreateProductWithStockInitDTO;
 import mg.transversal.commerce_brand.product.model.ProductDTO;
+import mg.transversal.commerce_brand.product.model.ProductWithCurrentStockDTO;
 import mg.transversal.commerce_brand.product.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(value = "/api/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/company/{companyId}/products", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductResource {
 
     private final ProductService productService;
@@ -29,14 +32,22 @@ public class ProductResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<List<ProductWithCurrentStockDTO>> getProductWithCurrentStockByCompanyId(
+            @PathVariable(name = "companyId") final Integer companyId) {
+        return ResponseEntity.ok(productService.findProductWithCurrentStockByCompanyId(companyId));
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDTO> getProduct(
             @PathVariable(name = "productId") final Integer productId) {
         return ResponseEntity.ok(productService.get(productId));
+    }
+
+    @PostMapping("/with-stock")
+    @ApiResponse(responseCode = "201")
+    public ResponseEntity<Integer> createProductWithInitStock(@RequestBody @Valid final CreateProductWithStockInitDTO productDTO) {
+        final Integer createdProductId = productService.createProductWithStockMovement(productDTO);
+        return new ResponseEntity<>(createdProductId, HttpStatus.CREATED);
     }
 
     @PostMapping

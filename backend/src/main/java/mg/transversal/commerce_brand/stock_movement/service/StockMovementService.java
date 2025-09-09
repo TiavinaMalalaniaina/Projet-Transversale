@@ -3,6 +3,7 @@ package mg.transversal.commerce_brand.stock_movement.service;
 import java.util.List;
 import mg.transversal.commerce_brand.company.domain.Company;
 import mg.transversal.commerce_brand.company.repos.CompanyRepository;
+import mg.transversal.commerce_brand.enums.StockMovementType;
 import mg.transversal.commerce_brand.events.BeforeDeleteCompany;
 import mg.transversal.commerce_brand.events.BeforeDeleteProduct;
 import mg.transversal.commerce_brand.product.domain.Product;
@@ -29,6 +30,16 @@ public class StockMovementService {
         this.stockMovementRepository = stockMovementRepository;
         this.companyRepository = companyRepository;
         this.productRepository = productRepository;
+    }
+
+    public Integer increaseStock(final StockMovementDTO dto) {
+        dto.setMovementType(StockMovementType.IN);
+        return this.create(dto);
+    }
+
+    public Integer decreaseStock(final StockMovementDTO dto) {
+        dto.setMovementType(StockMovementType.OUT);
+        return this.create(dto);
     }
 
     public List<StockMovementDTO> findAll() {
@@ -72,7 +83,6 @@ public class StockMovementService {
         stockMovementDTO.setTotalCost(stockMovement.getTotalCost());
         stockMovementDTO.setReason(stockMovement.getReason());
         stockMovementDTO.setLotNumber(stockMovement.getLotNumber());
-        stockMovementDTO.setExpiryDate(stockMovement.getExpiryDate());
         stockMovementDTO.setMovementDate(stockMovement.getMovementDate());
         stockMovementDTO.setNotes(stockMovement.getNotes());
         stockMovementDTO.setCompany(stockMovement.getCompany() == null ? null : stockMovement.getCompany().getCompanyId());
@@ -88,7 +98,6 @@ public class StockMovementService {
         stockMovement.setTotalCost(stockMovementDTO.getTotalCost());
         stockMovement.setReason(stockMovementDTO.getReason());
         stockMovement.setLotNumber(stockMovementDTO.getLotNumber());
-        stockMovement.setExpiryDate(stockMovementDTO.getExpiryDate());
         stockMovement.setMovementDate(stockMovementDTO.getMovementDate());
         stockMovement.setNotes(stockMovementDTO.getNotes());
         final Company company = stockMovementDTO.getCompany() == null ? null : companyRepository.findById(stockMovementDTO.getCompany())

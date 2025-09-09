@@ -30,6 +30,13 @@ public class CategoryService {
         this.publisher = publisher;
     }
 
+    public List<CategoryDTO> findCategoriesByCompanyId(final Integer companyId) {
+        final List<Category> categories = categoryRepository.findByCompanyCompanyId(companyId);
+        return categories.stream()
+                .map(category -> mapToDTO(category, new CategoryDTO()))
+                .toList();
+    }
+
     public List<CategoryDTO> findAll() {
         final List<Category> categories = categoryRepository.findAll(Sort.by("categoryId"));
         return categories.stream()

@@ -2,8 +2,8 @@ services:
   postgres:
     image: postgres:17.6
     environment:
-    - POSTGRES_DB=commerce-brand
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=P4ssword!
+    - POSTGRES_DB=projet_transversal
+    - POSTGRES_USER=projet_transversal_user
+    - POSTGRES_PASSWORD=projet_transversal
     ports:
-    - 5433:5432
+    - 5432:5432

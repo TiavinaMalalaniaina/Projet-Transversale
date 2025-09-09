@@ -33,6 +33,11 @@ public class UnitResource {
         return ResponseEntity.ok(unitService.findAll());
     }
 
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<UnitDTO>> getUnitByCompany(@PathVariable(name = "companyId") final Integer companyId) {
+        return ResponseEntity.ok(unitService.findUnitsByCompanyId(companyId));
+    }
+
     @GetMapping("/{unitId}")
     public ResponseEntity<UnitDTO> getUnit(@PathVariable(name = "unitId") final Integer unitId) {
         return ResponseEntity.ok(unitService.get(unitId));

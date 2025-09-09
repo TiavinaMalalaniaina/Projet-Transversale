@@ -35,10 +35,12 @@ import {
   Delete,
   EditSquare,
   FilterListAlt,
+  Inventory,
   People,
   Search,
   Timer,
 } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const rows = [
   {
@@ -188,10 +190,14 @@ export default function Stocks() {
           sx={{
             display: 'flex',
             alignItems: 'center',
+            gap: 2,
           }}
         >
-          <Button variant="contained" startIcon={<Add />}>
-            Ajouter un produit
+          <Button component={Link} variant="contained" startIcon={<Add />} color="info" to="/add-product">
+            Nouveau produit
+          </Button>
+          <Button component={Link} variant="contained" startIcon={<Inventory />} to="/add-stock">
+            Ajouter du stock
           </Button>
         </Box>
       </Box>

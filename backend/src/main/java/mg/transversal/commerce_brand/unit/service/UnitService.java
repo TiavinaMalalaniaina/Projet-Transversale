@@ -30,6 +30,13 @@ public class UnitService {
         this.publisher = publisher;
     }
 
+    public List<UnitDTO> findUnitsByCompanyId(final Integer companyId) {
+        final List<Unit> units = unitRepository.findByCompanyCompanyId(companyId);
+        return units.stream()
+                .map(unit -> mapToDTO(unit, new UnitDTO()))
+                .toList();
+    }
+
     public List<UnitDTO> findAll() {
         final List<Unit> units = unitRepository.findAll(Sort.by("unitId"));
         return units.stream()

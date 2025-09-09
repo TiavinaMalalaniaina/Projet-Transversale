@@ -2,12 +2,15 @@ package mg.transversal.commerce_brand.stock_movement.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,8 +18,9 @@ import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import mg.transversal.commerce_brand.company.domain.Company;
+import mg.transversal.commerce_brand.enums.StockMovementType;
 import mg.transversal.commerce_brand.product.domain.Product;
-
+import mg.transversal.commerce_brand.stock_movement.utils.StockMovementUtils;
 
 @Entity
 @Getter
@@ -25,20 +29,13 @@ public class StockMovement {
 
     @Id
     @Column(nullable = false, updatable = false)
-    @SequenceGenerator(
-            name = "primary_sequence",
-            sequenceName = "primary_sequence",
-            allocationSize = 1,
-            initialValue = 10000
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "primary_sequence"
-    )
+    @SequenceGenerator(name = "primary_sequence", sequenceName = "primary_sequence", allocationSize = 1, initialValue = 10000)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "primary_sequence")
     private Integer stockMovementId;
 
     @Column(nullable = false, length = 20)
-    private String movementType;
+    @Enumerated(EnumType.STRING)
+    private StockMovementType movementType;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal quantity;
@@ -56,9 +53,6 @@ public class StockMovement {
     private String lotNumber;
 
     @Column
-    private LocalDate expiryDate;
-
-    @Column
     private OffsetDateTime movementDate;
 
     @Column(columnDefinition = "text")
@@ -72,4 +66,13 @@ public class StockMovement {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @PrePersist
+    public void prePersist() {
+        if (movementDate == null) {
+            movementDate = OffsetDateTime.now();
+        }
+        if (lotNumber == null) {
+            lotNumber = StockMovementUtils.generateLotNumber();
+        }
+    }
 }

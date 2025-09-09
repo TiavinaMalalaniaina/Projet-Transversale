@@ -183,7 +183,6 @@ CREATE TABLE stock_movement (
     total_cost DECIMAL(12,2),
     reason VARCHAR(255),
     lot_number VARCHAR(50),
-    expiry_date DATE,
     movement_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     notes TEXT,
     FOREIGN KEY (company_id) REFERENCES company(company_id) ON DELETE CASCADE,
