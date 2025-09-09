@@ -29,3 +29,18 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+
+# 🖼️ Resources (generated)
+resources/android/
+resources/ios/
+
+# 🔥 Build outputs
+dist/
+build/
+www/
+
+# ⚡ Capacitor / Cordova
+android/
+ios/
+.cordova/
+resources/android/**/*
